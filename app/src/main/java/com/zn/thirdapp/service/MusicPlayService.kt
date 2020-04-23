@@ -5,12 +5,12 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Binder
 import android.os.IBinder
+import android.util.Log
 import com.zn.thirdapp.R
-import java.io.File
-import java.lang.Exception
-import kotlin.random.Random
 
 class MusicPlayService : Service() {
+
+    private var mTagName = "Music Play Service"
 
     lateinit var mediaPlayer: MediaPlayer
 
@@ -21,12 +21,12 @@ class MusicPlayService : Service() {
     override fun onCreate() {
         super.onCreate()
         initMediaPlayer()
-        println("Music player created")
+        Log.i(mTagName, "Music player created")
     }
 
     private fun initMediaPlayer() {
         try {
-            mediaPlayer = MediaPlayer.create(this,R.raw.test)
+            mediaPlayer = MediaPlayer.create(this, R.raw.test)
             mediaPlayer.prepare()
         } catch (e: Exception) {
             stopSelf()
@@ -34,21 +34,20 @@ class MusicPlayService : Service() {
     }
 
     fun play() {
-        println("Playing music")
+        Log.i(mTagName, "Playing music")
         if (!mediaPlayer.isPlaying) {
             mediaPlayer.start()
         }
     }
 
     fun pause() {
-        println("Playing paused")
+        Log.i(mTagName, "Music paused")
         if (mediaPlayer.isPlaying) {
             mediaPlayer.pause()
         }
     }
 
     inner class MediaPlayerBinder : Binder() {
-
         fun getService(): MusicPlayService = this@MusicPlayService
     }
 }

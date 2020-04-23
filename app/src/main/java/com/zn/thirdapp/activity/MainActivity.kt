@@ -8,8 +8,6 @@ import android.os.Bundle
 import android.os.IBinder
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.zn.thirdapp.R
 import com.zn.thirdapp.service.MusicPlayService
@@ -25,17 +23,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        //set binder
+        //start music player service and control button
         var intent = Intent(this, MusicPlayService::class.java)
         startService(intent)
 
-        dial.setOnClickListener {
+        play.setOnClickListener {
             if (mBound) {
                 mService.play()
             }
         }
 
-        sms.setOnClickListener {
+        pause.setOnClickListener {
             if (mBound) {
                 mService.pause()
             }
