@@ -47,6 +47,16 @@ class MusicPlayService : Service() {
         }
     }
 
+    fun stop(){
+        Log.i(mTagName, "Music stopped")
+        mediaPlayer.stop()
+    }
+
+    fun release(){
+        Log.i(mTagName, "Music player released")
+        mediaPlayer.release()
+    }
+
     inner class MediaPlayerBinder : Binder() {
         fun getService(): MusicPlayService = this@MusicPlayService
     }

@@ -10,14 +10,16 @@ import android.widget.Toast
 class SMSReceiver : BroadcastReceiver() {
 
     private var mPUDS = "pdus"
+    private var mFormat = "format"
 
     override fun onReceive(context: Context, intent: Intent) {
         // This method is called when the BroadcastReceiver is receiving an Intent broadcast.
-        var bundle = intent.extras
-        var messageArrays: Array<ByteArray> = bundle?.get(mPUDS) as Array<ByteArray>
+        val bundle = intent.extras
+        val format = bundle?.get(mFormat) as String
+        val messageArrays: Array<ByteArray> = bundle.get(mPUDS) as Array<ByteArray>
         lateinit var content : String
         for (byte in messageArrays) {
-            var message = SmsMessage.createFromPdu(byte)//format问题？
+            val message = SmsMessage.createFromPdu(byte,format)
             content = message.messageBody
             Log.i("Received: ", content)
         }
