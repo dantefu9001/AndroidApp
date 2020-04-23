@@ -1,29 +1,66 @@
 package com.zn.thirdapp.activity
 
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
-import android.net.Uri
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.zn.thirdapp.R
+import com.zn.thirdapp.service.MusicPlayService
 import kotlinx.android.synthetic.main.activity_main.*
 
+
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var mService: MusicPlayService
+    private var mBound: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        //sms and dial intents
-        sms.setOnClickListener {
-            val smsToUri = Uri.parse("smsto:")
-            val intent = Intent(Intent.ACTION_SENDTO, smsToUri)
-            startActivity(intent)
-        }
+        //set binder
+        var intent = Intent(this, MusicPlayService::class.java)
+        startService(intent)
+
         dial.setOnClickListener {
-            val intent = Intent(Intent.ACTION_DIAL)
-            startActivity(intent)
+            if (mBound) {
+                mService.play()
+            }
+        }
+
+        sms.setOnClickListener {
+            if (mBound) {
+                mService.pause()
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // Bind to LocalService
+        Intent(this, MusicPlayService::class.java).also { intent ->
+            bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+        }
+    }
+
+    private val serviceConnection: ServiceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName, service: IBinder) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            val binder: MusicPlayService.MediaPlayerBinder =
+                service as MusicPlayService.MediaPlayerBinder
+            mService = binder.getService()
+            mBound = true
+        }
+
+        override fun onServiceDisconnected(name: ComponentName) {
+            mBound = false
         }
     }
 

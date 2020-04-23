@@ -8,6 +8,9 @@
     <string name="previous">Previous</string>
     <string name="dial">Dial</string>
     <string name="random_number">Random Test</string>
+    <string name="music_player">music player</string>
+    <string name="play">Play</string>
+    <string name="stop">Stop</string>
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
